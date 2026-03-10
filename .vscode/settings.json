@@ -1,0 +1,4 @@
+{
+    "python.defaultInterpreterPath": "/home/achintya/tfenv_gpu/bin/python",
+    "python.analysis.typeCheckingMode": "off"
+}
