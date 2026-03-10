@@ -4,3 +4,5 @@ __pycache__/
 dataset/
 outputs/
 .env
+.next/
+.env*
