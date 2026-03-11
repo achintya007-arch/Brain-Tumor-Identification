@@ -1,8 +1,34 @@
-node_modules/
+cat > ~/brain-tumor-identification/.gitignore << 'EOF'
+# Python
 __pycache__/
 *.pyc
+*.pyo
+.venv/
+tfenv_gpu/
+
+# Dataset (too large for git)
 dataset/
-outputs/
-.env
-.next/
-.env*
+
+# Model weights (too large for git)
+outputs/models/
+
+# Training outputs (regeneratable)
+outputs/plots/
+outputs/gradcam/
+
+# Frontend
+brain-tumor-app/frontend/node_modules/
+brain-tumor-app/frontend/.next/
+
+# Env
+.env.local
+*.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+outputs/*
+!outputs/.gitkeep
+
+EOF

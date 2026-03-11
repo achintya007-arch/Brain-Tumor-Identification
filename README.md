@@ -1,3 +1,12 @@
+cat > ~/brain-tumor-identification/README.md << 'EOF'
+# 🧠 Brain Tumor Classification
+
+A deep learning classifier that identifies brain tumors from MRI scans into 4 categories using transfer learning with EfficientNetV2-L.
+
+**Classes:** Glioma · Meningioma · No Tumor · Pituitary
+
+---
+
 ## Results
 
 | Metric | Value |
@@ -6,20 +15,67 @@
 | Macro ROC-AUC | 0.9977 |
 | Glioma F1 | 0.96 |
 | Meningioma F1 | 0.94 |
-| Notumor F1 | 0.99 |
+| No Tumor F1 | 0.99 |
 | Pituitary F1 | 0.98 |
 
-### Per-Class AUC
-| Class | AUC |
-|---|---|
-| Glioma | 0.9960 |
-| Meningioma | 0.9962 |
-| No Tumor | 0.9997 |
-| Pituitary | 0.9991 |
+---
 
-### Training Setup
-- **Hardware:** NVIDIA RTX 4060 Laptop GPU (8GB VRAM)
-- **OS:** Windows 11 via WSL2 (Ubuntu 24.04)
-- **Framework:** TensorFlow 2.20.0, Python 3.11
-- **Phase 1:** 10 epochs, frozen backbone, LR=1e-3 → val_accuracy: 92%
-- **Phase 2:** 15 epochs, top 30% backbone unfrozen, LR=1e-5 → val_accuracy: 97%
+## Project Structure
+
+\`\`\`
+├── brain-tumor-app/
+│   ├── backend/        ← FastAPI + Grad-CAM inference server
+│   └── frontend/       ← Next.js web app (v0 generated)
+├── src/                ← Training pipeline
+│   ├── config.py
+│   ├── dataset.py
+│   ├── model.py
+│   ├── train.py
+│   ├── evaluate.py
+│   └── gradcam.py
+├── predict.py          ← Single image CLI inference
+└── requirements.txt
+\`\`\`
+
+---
+
+## Setup
+
+\`\`\`bash
+pip install -r requirements.txt
+\`\`\`
+
+## Run
+
+\`\`\`bash
+# Backend
+cd brain-tumor-app/backend
+uvicorn main:app --host 0.0.0.0 --port 8000
+
+# Frontend
+cd brain-tumor-app/frontend
+npm install && npm run dev
+\`\`\`
+
+Open http://localhost:3000
+
+---
+
+## Model Architecture
+
+- **Backbone:** EfficientNetV2-L (pretrained ImageNet)
+- **Input:** 224×224
+- **Head:** GlobalAveragePooling → BatchNorm → Dense(512) → Dropout(0.5) → Softmax(4)
+- **Training:** Two-phase (head-only → fine-tune top 30% backbone)
+- **Optimiser:** AdamW lr=1e-3/1e-5, weight decay=1e-4
+- **Class imbalance:** Balanced class weights
+
+## Hardware
+
+RTX 4060 Laptop GPU (8GB) via WSL2 on Windows 11.
+
+## Author
+
+Akella Ahlad Achintya — GITAM University Bengaluru (2023006111)  
+Mentor: Dr. Showkat Ahmad Dar
+EOF
